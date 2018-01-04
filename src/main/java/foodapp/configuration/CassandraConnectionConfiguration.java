@@ -1,4 +1,4 @@
-package cassandra.util;
+package foodapp.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
@@ -10,10 +10,10 @@ import org.springframework.data.cassandra.config.java.AbstractCassandraConfigura
 import org.springframework.data.cassandra.repository.config.EnableCassandraRepositories;
 
 @Configuration
-@EnableCassandraRepositories(basePackages = "cassandra.repository")
+@EnableCassandraRepositories(basePackages = "foodapp.repository")
 @PropertySource(value = { "classpath:cassandra.properties" })
 
-public class CassandraUtil extends AbstractCassandraConfiguration {
+public class CassandraConnectionConfiguration extends AbstractCassandraConfiguration {
     private static final String KEYSPACE = "cassandra.keyspace";
     private static final String CONTACTPOINTS = "cassandra.contactpoints";
     private static final String PORT = "cassandra.port";

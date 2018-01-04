@@ -1,10 +1,10 @@
-package cassandra.entity;
+package foodapp.entity;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 
-@Document(indexName = "food", type = "foood", shards = 1, replicas = 0)
-public class FoodEntityElastic {
+@Document(indexName = "restaurant", type = "food", shards = 1, replicas = 0)
+public class FoodAppEntityForElasticSearch {
 
     @Id
     private String id;
@@ -12,11 +12,11 @@ public class FoodEntityElastic {
     private String type;
     private int price;
 
-    public FoodEntityElastic() {
+    public FoodAppEntityForElasticSearch() {
 
     }
 
-    public FoodEntityElastic(String id, String name, String type, int price) {
+    public FoodAppEntityForElasticSearch(String id, String name, String type, int price) {
         this.id = id;
         this.name = name;
         this.type = type;

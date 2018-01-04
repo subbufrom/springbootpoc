@@ -1,33 +1,33 @@
-package cassandra.entity;
+package foodapp.entity;
 
 import org.springframework.data.cassandra.mapping.PrimaryKey;
 import org.springframework.data.cassandra.mapping.Table;
 
 @Table("food")
-public class FoodEntityCassandra {
+public class FoodAppEntityForCassandra {
 
     @PrimaryKey
-    private int id;
+    private String id;
     private String name;
     private String type;
     private Long price;
 
-    public FoodEntityCassandra(){
+    public FoodAppEntityForCassandra(){
 
     }
 
-    public FoodEntityCassandra(int id, String name, String type, Long price) {
+    public FoodAppEntityForCassandra(String id, String name, String type, Long price) {
         this.id = id;
         this.name = name;
         this.type = type;
         this.price = price;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
