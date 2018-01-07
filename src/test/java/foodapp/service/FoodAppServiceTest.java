@@ -1,97 +1,86 @@
 package foodapp.service;
 
+import foodapp.entity.FoodAppEntityForCassandra;
 import foodapp.entity.FoodAppEntityForElasticSearch;
-import org.elasticsearch.client.Client;
-import org.elasticsearch.common.settings.Settings;
-import org.elasticsearch.node.Node;
-import org.elasticsearch.node.NodeBuilder;
+import foodapp.repository.CassandraRepository;
+import foodapp.repository.ElasticSearchRepository;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.servlet.MockMvc;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+import static org.mockito.MockitoAnnotations.initMocks;
+import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
-import java.io.File;
-
-import static org.junit.Assert.*;
-
-
+@RunWith(SpringRunner.class)
 public class FoodAppServiceTest {
 
-    private static Node node;
-    private static Client client;
-
-    @Bean
-    public NodeBuilder nodeBuilder() {
-        return new NodeBuilder();
-    }
-
-    @Autowired
+    @InjectMocks
     private FoodAppService foodAppService;
 
-    @Autowired
-    private ElasticsearchTemplate elasticsearchTemplate;
+    @Mock
+    CassandraRepository cassandraRepository;
+
+
+    @Mock
+    ElasticSearchRepository elasticsearchRepository;
+
+    MockMvc mockMvc;
+
 
     @Before
-    public void setUp() throws Exception {
-        File tmpDir = File.createTempFile("elastic", Long.toString(System.nanoTime()));
-        System.out.println("Temp directory: " + tmpDir.getAbsolutePath());
-        Settings.Builder elasticsearchSettings =
-                Settings.settingsBuilder()
-                        .put("http.enabled", "false") // 1
-                        .put("index.number_of_shards", "1")
-                        .put("path.data", new File(tmpDir, "data").getAbsolutePath()) // 2
-                        .put("path.logs", new File(tmpDir, "logs").getAbsolutePath()) // 2
-                        .put("path.work", new File(tmpDir, "work").getAbsolutePath()) // 2
-                        .put("path.home", tmpDir); // 3
-
-        node = nodeBuilder().local(true).settings(elasticsearchSettings.build()).node();
-
+    public void setup() throws Exception {
+        initMocks(this);
+        mockMvc = standaloneSetup(foodAppService).build();
 
         }
-    public Client getClient() {
-        return node.client();
-
-//        startupEmbeddedNode
-//
-//        elasticsearchTemplate.deleteIndex(FoodAppEntityForElasticSearch.class);
-//        elasticsearchTemplate.createIndex(FoodAppEntityForElasticSearch.class);
-//        elasticsearchTemplate.putMapping(FoodAppEntityForElasticSearch.class);
-//        elasticsearchTemplate.refresh(FoodAppEntityForElasticSearch.class);
-
-    }
 
     @After
     public void tearDown() throws Exception {
     }
 
     @Test
-    public void save() {
+    public void saveTest() {
+        FoodAppEntityForCassandra foodAppEntityForCassandra = new FoodAppEntityForCassandra();
+        when(cassandraRepository.save(any(FoodAppEntityForCassandra.class))).thenReturn(foodAppEntityForCassandra);
 
-
+        foodAppService.save(foodAppEntityForCassandra);
     }
 
     @Test
-    public void saveElastic() {
+    public void saveElasticTest() {
 
-        FoodAppEntityForElasticSearch foodAppEntityForElasticSearch = new FoodAppEntityForElasticSearch("1","testsamosa","testtype",20);
+        FoodAppEntityForElasticSearch foodAppEntityForElasticSearch = new FoodAppEntityForElasticSearch();
+        when(elasticsearchRepository.save(any(FoodAppEntityForElasticSearch.class))).thenReturn(foodAppEntityForElasticSearch);
         foodAppService.saveElastic(foodAppEntityForElasticSearch);
     }
 
     @Test
-    public void searchAll() {
+    public void searchAllTest() {
+        foodAppService.searchAll();
     }
 
     @Test
     public void findById() {
+        String id = "1";
+        foodAppService.findById(id);
     }
 
     @Test
     public void findInRange() {
+        int from = 1;
+        int to = 10;
+        foodAppService.findInRange(from,to);
     }
 
     @Test
     public void delete() {
+        String id = "1";
+        foodAppService.delete(id);
     }
 }

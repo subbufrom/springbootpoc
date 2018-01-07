@@ -47,6 +47,4 @@ public class FoodAppService {
         cassandraRepository.delete(id);
         elasticSearchRepository.delete(id);
     }
-
-
 }
