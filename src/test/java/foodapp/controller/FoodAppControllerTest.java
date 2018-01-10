@@ -28,7 +28,8 @@ public class FoodAppControllerTest {
 
     private MockMvc mockMvc;
 
-    private String json ="{\"id\":\"5\",\"name\":\"tamoapuri\",\"price\":\"95\",\"type\":\"veg\"}";
+    private String json ="{\"id\":\"5\",\"name\":\"testname\",\"price\":\"95\",\"type\":\"veg\"}";
+    private String Errorjson ="{\"id\":\"5\",\"name\":\"testname\",\"price\":\"abc\",\"type\":\"veg\"}";
 
     @Before
     public void setup()throws Exception {
@@ -37,7 +38,7 @@ public class FoodAppControllerTest {
     }
 
     @Test
-    public void posttest() throws Exception {
+    public void postTestWithCorrectData() throws Exception {
         MvcResult result = mockMvc.perform(post("/insert")
                 .accept(MediaType.APPLICATION_JSON)
                 .content(json)
@@ -48,7 +49,18 @@ public class FoodAppControllerTest {
     }
 
     @Test
-    public void getTesting() throws Exception {
+    public void postTestWithInCorrectData() throws Exception {
+        MvcResult result = mockMvc.perform(post("/insert")
+                .accept(MediaType.APPLICATION_JSON)
+                .content(Errorjson)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andReturn();
+        MockHttpServletResponse response = result.getResponse();
+        assertNotEquals(HttpStatus.OK.value(), response.getStatus());
+    }
+
+    @Test
+    public void getTestingSearchAll() throws Exception {
         MvcResult result = mockMvc.perform(get("/search/all")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON))
@@ -58,7 +70,7 @@ public class FoodAppControllerTest {
     }
 
     @Test
-    public void getTestingg() throws Exception {
+    public void getTestingSearchIndividual() throws Exception {
         MvcResult result = mockMvc.perform(get("/search/2")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON))
@@ -68,7 +80,7 @@ public class FoodAppControllerTest {
     }
 
     @Test
-    public void getTestinggg() throws Exception {
+    public void getTestingSearchRange() throws Exception {
         MvcResult result = mockMvc.perform(get("/search/1/10")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON))

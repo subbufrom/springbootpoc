@@ -19,7 +19,7 @@ public class FoodAppEntityForElasticSearchTest {
     @Test
     public void EntityTest() throws Exception {
         String expectedString = "{\"id\":\"1\",\"name\":\"testfood\",\"type\":\"veg\",\"price\":12}";
-        FoodAppEntityForElasticSearch elasticSearch = new FoodAppEntityForElasticSearch();
+        FoodAppEntityForElasticSearch elasticSearch = new FoodAppEntityForElasticSearch("1","testfood","veg",20);
         elasticSearch.setId("1");
         elasticSearch.setName("testfood");
         elasticSearch.setType("veg");

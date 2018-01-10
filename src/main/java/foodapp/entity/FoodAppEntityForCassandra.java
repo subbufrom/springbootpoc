@@ -3,13 +3,19 @@ package foodapp.entity;
 import org.springframework.data.cassandra.mapping.PrimaryKey;
 import org.springframework.data.cassandra.mapping.Table;
 
+import javax.validation.constraints.NotNull;
+
 @Table("food")
 public class FoodAppEntityForCassandra {
 
+    @NotNull
     @PrimaryKey
     private String id;
+    @NotNull
     private String name;
+    @NotNull
     private String type;
+    @NotNull
     private Long price;
 
     public FoodAppEntityForCassandra(){

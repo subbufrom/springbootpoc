@@ -12,6 +12,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import java.io.IOException;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -26,38 +27,24 @@ public class FoodAppServiceTest {
     @Mock
     CassandraRepository cassandraRepository;
 
-
     @Mock
     ElasticSearchRepository elasticsearchRepository;
 
     MockMvc mockMvc;
 
-
     @Before
     public void setup() throws Exception {
         initMocks(this);
         mockMvc = standaloneSetup(foodAppService).build();
-
         }
 
-    @After
-    public void tearDown() throws Exception {
-    }
-
     @Test
-    public void saveTest() {
+    public void saveTest() throws IOException {
         FoodAppEntityForCassandra foodAppEntityForCassandra = new FoodAppEntityForCassandra();
-        when(cassandraRepository.save(any(FoodAppEntityForCassandra.class))).thenReturn(foodAppEntityForCassandra);
-
-        foodAppService.save(foodAppEntityForCassandra);
-    }
-
-    @Test
-    public void saveElasticTest() {
-
         FoodAppEntityForElasticSearch foodAppEntityForElasticSearch = new FoodAppEntityForElasticSearch();
         when(elasticsearchRepository.save(any(FoodAppEntityForElasticSearch.class))).thenReturn(foodAppEntityForElasticSearch);
-        foodAppService.saveElastic(foodAppEntityForElasticSearch);
+        when(cassandraRepository.save(any(FoodAppEntityForCassandra.class))).thenReturn(foodAppEntityForCassandra);
+        foodAppService.save(foodAppEntityForCassandra);
     }
 
     @Test

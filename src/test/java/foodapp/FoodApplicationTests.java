@@ -10,7 +10,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class FoodApplicationTests {
 
     @Test
-    public void test() {
+    public void contextLoad() {
         FoodApplication.main(new String[]{
                 "--server.port = 8888",
         });

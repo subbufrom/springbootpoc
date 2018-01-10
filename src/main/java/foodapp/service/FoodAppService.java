@@ -1,12 +1,13 @@
 package foodapp.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import foodapp.entity.FoodAppEntityForCassandra;
 import foodapp.entity.FoodAppEntityForElasticSearch;
 import foodapp.repository.ElasticSearchRepository;
 import foodapp.repository.CassandraRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,12 +20,13 @@ public class FoodAppService {
     @Autowired
     private ElasticSearchRepository elasticSearchRepository;
 
-    public void save(FoodAppEntityForCassandra foodAppEntityForCassandra) {
-        cassandraRepository.save(foodAppEntityForCassandra);
-    }
+    public void save(FoodAppEntityForCassandra cassandradata) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        String elasticdatastring = objectMapper.writeValueAsString(cassandradata);
+        FoodAppEntityForElasticSearch elasticdata = objectMapper.readValue(elasticdatastring,FoodAppEntityForElasticSearch.class);
+        cassandraRepository.save(cassandradata);
+        elasticSearchRepository.save(elasticdata);
 
-    public void saveElastic(FoodAppEntityForElasticSearch foodAppEntityForElasticSearch) {
-        elasticSearchRepository.save(foodAppEntityForElasticSearch);
     }
 
     public List<FoodAppEntityForElasticSearch> searchAll() {

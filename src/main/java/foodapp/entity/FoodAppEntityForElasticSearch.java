@@ -3,13 +3,19 @@ package foodapp.entity;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 
+import javax.validation.constraints.NotNull;
+
 @Document(indexName = "restaurant", type = "food", shards = 1, replicas = 0)
 public class FoodAppEntityForElasticSearch {
 
     @Id
+    @NotNull
     private String id;
+    @NotNull
     private String name;
+    @NotNull
     private String type;
+    @NotNull
     private int price;
 
     public FoodAppEntityForElasticSearch() {
